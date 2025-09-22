@@ -82,6 +82,7 @@
     
 //   );
 // }
+import { useAuth } from "@/context/AuthContext";
 import { Stack } from "expo-router";
 import React, { useCallback, useEffect, useState } from "react";
 import {
@@ -99,6 +100,9 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { config, tablesDB } from '../../lib/appwrite';
 
 export default function Index() {
+ 
+  const {signout, user} = useAuth()
+
   const [refreshing, setRefreshing] = useState(false);
   const [tasks, setTasks] = useState([]);
   const [error, setError] = useState(null);
@@ -185,7 +189,7 @@ export default function Index() {
     {/* the above line removes the screen name*/}
       {/* Header */}
       <View style={styles.header}>
-        <Text style={styles.headerText}>My To-Do List</Text>
+        <Text style={styles.headerText}>hello {user.name}</Text>
         <TouchableOpacity onPress={init}>
           <Text style={styles.refreshText}>↻</Text>
         </TouchableOpacity>
@@ -229,6 +233,11 @@ export default function Index() {
           </Text>
         </View>
       )}
+      <TouchableOpacity 
+        onPress={signout}
+      >
+        <Text>Logout</Text>
+      </TouchableOpacity>
     </SafeAreaView>
   );
 }
