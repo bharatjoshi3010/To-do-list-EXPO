@@ -52,7 +52,34 @@ const AuthProvider =({children}) => {
         setloading(false)
     };
 
-    const contextData = {session, user, signin, signout};
+
+    const signup = async (email, password, name) => {
+    try {
+        // Step 1: Create the user
+        await account.create('unique()', email, password, name);
+        console.log("User registered successfully!");
+
+        setloading(true)
+        try{
+            // await account.deleteSession('current');
+            const responseSession = await account.createEmailPasswordSession(email, password);
+            setSession(responseSession)
+            const responseUser = await account.get()
+            setUser(responseUser)
+        }catch(error){
+            console.log(error)
+        }
+        setloading(false);
+
+        // setSession(respopnsesession)
+    } catch (error) {
+        console.error("Signup error:", error.message);
+        throw error;
+    }
+    }
+
+
+    const contextData = {session, user, signin, signout, signup};
     return (
         <AuthContext.Provider value={contextData}>
             {loading ? (
